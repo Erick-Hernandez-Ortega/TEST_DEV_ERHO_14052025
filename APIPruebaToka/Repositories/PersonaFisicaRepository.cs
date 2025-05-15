@@ -98,5 +98,26 @@ namespace APIPruebaToka.Repositories
 
             return (-1, "Error desconocido");
         }
+
+        public async Task<(int Error, string Message)> DeletePersonaFisicaAsync(int id)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var command = new SqlCommand("sp_EliminarPersonaFisica", connection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.AddWithValue("@IdPersonaFisica", id);
+
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                int error = reader.GetInt32(0);
+                string message = reader.GetString(1);
+                return (error, message);
+            }
+
+            return (-1, "No se recibió respuesta del procedimiento almacenado.");
+        }
     }
 }

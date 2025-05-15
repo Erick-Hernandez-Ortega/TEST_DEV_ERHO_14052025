@@ -46,5 +46,19 @@ namespace APIPruebaToka.Controllers
             else
                 return NotFound(message);
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (id <= 0)
+                return BadRequest("Id inválido");
+
+            var (error, message) = await _repo.DeletePersonaFisicaAsync(id);
+
+            if (error > 0)
+                return Ok(message);
+            else
+                return NotFound(message);
+        }
     }
 }
