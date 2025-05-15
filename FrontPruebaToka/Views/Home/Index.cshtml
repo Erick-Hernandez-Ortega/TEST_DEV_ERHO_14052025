@@ -1,8 +1,43 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model LoginViewModel
+
+@{
+    ViewData["Title"] = "Iniciar sesión";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<main class="form-signin w-100 m-auto">
+    <form asp-action="Login" method="post">
+        <h1 class="h3 mb-3 fw-normal">Login</h1>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Username" class="form-control" id="floatingInput" placeholder="ramonchis" />
+            <label for="floatingInput">Username</label>
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+        <div class="form-floating mb-3">
+            <input asp-for="Password" class="form-control" id="floatingPassword" placeholder="Contraseña" />
+            <label for="floatingPassword">Contraseña</label>
+            <span asp-validation-for="Password" class="text-danger"></span>
+        </div>
+
+        <button class="btn btn-primary w-100 py-2" type="submit">Iniciar sesión</button>
+    </form>
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">
+            @TempData["Success"]
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger">
+            @TempData["Error"]
+        </div>
+    }
+</main>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
