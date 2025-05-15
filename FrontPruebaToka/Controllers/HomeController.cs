@@ -58,7 +58,7 @@ namespace FrontPruebaToka.Controllers
                 HttpContext.Session.SetString("Token", result.Data);
 
                 TempData["Success"] = "Inicio de sesión exitoso.";
-                return RedirectToAction("Index", "Home");
+                return RedirectToAction("Index", "PersonasFisicas");
             }
             else
             {

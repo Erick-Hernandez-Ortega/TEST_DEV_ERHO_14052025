@@ -31,5 +31,24 @@ namespace FrontPruebaToka.Controllers
 
             return View(new List<PersonaFisicaViewModel>());
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var client = _httpClientFactory.CreateClient();
+            var response = await client.DeleteAsync($"http://localhost:5268/api/PersonaFisica/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Persona eliminada correctamente.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al eliminar la persona.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }
