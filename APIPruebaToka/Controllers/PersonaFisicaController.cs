@@ -32,5 +32,19 @@ namespace APIPruebaToka.Controllers
             var persons = await _repo.GetPersonasFisicasAsync();
             return Ok(persons);
         }
+
+        [HttpPut]
+        public async Task<IActionResult> UpdateOne([FromBody] UpdatePersonaFisica dto)
+        {
+            if (dto.Id <= 0)
+                return BadRequest("Id inválido");
+
+            var (error, message) = await _repo.UpdatePersonaFisicaAsync(dto);
+
+            if (error > 0)
+                return Ok(message);
+            else
+                return NotFound(message);
+        }
     }
 }

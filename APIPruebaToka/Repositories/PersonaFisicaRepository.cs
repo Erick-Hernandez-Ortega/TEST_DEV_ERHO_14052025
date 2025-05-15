@@ -13,7 +13,7 @@ namespace APIPruebaToka.Repositories
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<(int Error, string Mensaje)> CreatePersonaFisicaAsync(CreatePersonaFisicaDTO dto)
+        public async Task<(int Error, string Message)> CreatePersonaFisicaAsync(CreatePersonaFisicaDTO dto)
         {
             using var connection = new SqlConnection(_connectionString);
             using var command = new SqlCommand("sp_AgregarPersonaFisica", connection);
@@ -70,5 +70,33 @@ namespace APIPruebaToka.Repositories
             return persons;
         }
 
+        public async Task<(int Error, string Message)> UpdatePersonaFisicaAsync(UpdatePersonaFisica dto)
+        {
+            using var connection = new SqlConnection(_connectionString);
+            using var command = new SqlCommand("sp_ActualizarPersonaFisica", connection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            command.Parameters.AddWithValue("@IdPersonaFisica", dto.Id);
+            command.Parameters.AddWithValue("@Nombre", dto.Nombre ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@ApellidoPaterno", dto.ApellidoPaterno ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@ApellidoMaterno", dto.ApellidoMaterno ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@RFC", dto.RFC ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@FechaNacimiento", dto.FechaNacimiento ?? (object)DBNull.Value);
+            command.Parameters.AddWithValue("@UsuarioAgrega", dto.UsuarioActualiza ?? (object)DBNull.Value);
+
+            await connection.OpenAsync();
+
+            using var reader = await command.ExecuteReaderAsync();
+
+            if (await reader.ReadAsync())
+            {
+                return (
+                    Convert.ToInt32(reader["ERROR"]),
+                    reader["MENSAJEERROR"].ToString()!
+                );
+            }
+
+            return (-1, "Error desconocido");
+        }
     }
 }
