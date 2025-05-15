@@ -78,5 +78,45 @@ namespace FrontPruebaToka.Controllers
 
             return RedirectToAction("Index");
         }
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(PersonaFisicaViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["Error"] = "Los datos son inválidos.";
+                return RedirectToAction("Index");
+            }
+
+            var client = _httpClientFactory.CreateClient();
+
+            var payload = new
+            {
+                model.Id,
+                model.Nombre,
+                model.ApellidoPaterno,
+                model.ApellidoMaterno,
+                model.RFC,
+                model.FechaNacimiento,
+                UsuarioAgrega = 1
+            };
+
+            var json = JsonSerializer.Serialize(payload);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PutAsync("http://localhost:5268/api/PersonaFisica", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["Success"] = "Persona editada correctamente.";
+            }
+            else
+            {
+                TempData["Error"] = "Ocurrió un error al editar.";
+            }
+
+            return RedirectToAction("Index");
+        }
+
     }
 }

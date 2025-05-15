@@ -37,6 +37,17 @@
                             data-id="@persons.Id" data-nombre="@persons.Nombre">
                         Eliminar
                     </button>
+                    <button class="btn btn-primary btn-sm"
+                            data-bs-toggle="modal"
+                            data-bs-target="#editModal"
+                            data-id="@persons.Id"
+                            data-nombre="@persons.Nombre"
+                            data-apellidopaterno="@persons.ApellidoPaterno"
+                            data-apellidomaterno="@persons.ApellidoMaterno"
+                            data-rfc="@persons.RFC"
+                            data-fechanacimiento="@persons.FechaNacimiento.ToString("yyyy-MM-dd")">
+                        Editar
+                    </button>
                 </td>
             </tr>
         }
@@ -116,6 +127,49 @@
     </div>
 </div>
 
+<!-- Modal edit -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form id="editForm" asp-action="Edit" method="post">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel">Editar Persona Física</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="Id" id="edit-id" />
+
+                    <div class="mb-3">
+                        <label for="edit-nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="edit-nombre" name="Nombre" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-apellidoPaterno" class="form-label">Apellido Paterno</label>
+                        <input type="text" class="form-control" id="edit-apellidoPaterno" name="ApellidoPaterno" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-apellidoMaterno" class="form-label">Apellido Materno</label>
+                        <input type="text" class="form-control" id="edit-apellidoMaterno" name="ApellidoMaterno" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-rfc" class="form-label">RFC</label>
+                        <input type="text" class="form-control" id="edit-rfc" name="RFC" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-fechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                        <input type="date" class="form-control" id="edit-fechaNacimiento" name="FechaNacimiento" required />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar cambios</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 @section Scripts {
     <script>
         const deleteModal = document.getElementById('deleteModal');
@@ -131,6 +185,17 @@
             modalTitle.textContent = 'Confirmar eliminación';
             modalBodyName.textContent = name;
             inputId.value = id;
+        });
+
+        const editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const button = event.relatedTarget;
+            document.getElementById('edit-id').value = button.getAttribute('data-id');
+            document.getElementById('edit-nombre').value = button.getAttribute('data-nombre');
+            document.getElementById('edit-apellidoPaterno').value = button.getAttribute('data-apellidopaterno');
+            document.getElementById('edit-apellidoMaterno').value = button.getAttribute('data-apellidomaterno');
+            document.getElementById('edit-rfc').value = button.getAttribute('data-rfc');
+            document.getElementById('edit-fechaNacimiento').value = button.getAttribute('data-fechanacimiento');
         });
     </script>
 }
