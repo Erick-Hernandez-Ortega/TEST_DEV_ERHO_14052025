@@ -13,7 +13,7 @@ namespace APIPruebaToka.Repositories
             _connectionString = configuration.GetConnectionString("DefaultConnection");
         }
 
-        public async Task<(int Error, string Mensaje)> CreatePersonaFisicaAsync(CreatePersonaFisica dto)
+        public async Task<(int Error, string Mensaje)> CreatePersonaFisicaAsync(CreatePersonaFisicaDTO dto)
         {
             using var connection = new SqlConnection(_connectionString);
             using var command = new SqlCommand("sp_AgregarPersonaFisica", connection);
@@ -39,5 +39,36 @@ namespace APIPruebaToka.Repositories
 
             return (-1, "Error desconocido");
         }
+
+        public async Task<List<PersonaFisicaDTO>> GetPersonasFisicasAsync()
+        {
+            var persons = new List<PersonaFisicaDTO>();
+
+            using var connection = new SqlConnection(_connectionString);
+            var query = @"SELECT IdPersonaFisica AS Id, Nombre, ApellidoPaterno, ApellidoMaterno, RFC, FechaNacimiento, UsuarioAgrega
+                  FROM Tb_PersonasFisicas
+                  WHERE Activo = 1";
+
+            using var command = new SqlCommand(query, connection);
+            await connection.OpenAsync();
+            using var reader = await command.ExecuteReaderAsync();
+
+            while (await reader.ReadAsync())
+            {
+                persons.Add(new PersonaFisicaDTO
+                {
+                    Id = Convert.ToInt32(reader["Id"]),
+                    Nombre = reader["Nombre"].ToString()!,
+                    ApellidoPaterno = reader["ApellidoPaterno"].ToString()!,
+                    ApellidoMaterno = reader["ApellidoMaterno"].ToString()!,
+                    RFC = reader["RFC"].ToString()!,
+                    FechaNacimiento = Convert.ToDateTime(reader["FechaNacimiento"]),
+                    UsuarioAgrega = reader["UsuarioAgrega"].ToString()!
+                });
+            }
+
+            return persons;
+        }
+
     }
 }

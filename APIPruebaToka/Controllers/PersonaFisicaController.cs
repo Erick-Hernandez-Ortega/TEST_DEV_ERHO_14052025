@@ -16,14 +16,21 @@ namespace APIPruebaToka.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Crear([FromBody] CreatePersonaFisica dto)
+        public async Task<IActionResult> CreateOne([FromBody] CreatePersonaFisicaDTO dto)
         {
-            var (error, mensaje) = await _repo.CreatePersonaFisicaAsync(dto);
+            var (error, message) = await _repo.CreatePersonaFisicaAsync(dto);
 
             if (error < 0)
-                return BadRequest(new { error, mensaje });
+                return BadRequest(new { error, message });
 
-            return Ok(new { id = error, mensaje });
+            return Ok(new { id = error, message });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var persons = await _repo.GetPersonasFisicasAsync();
+            return Ok(persons);
         }
     }
 }

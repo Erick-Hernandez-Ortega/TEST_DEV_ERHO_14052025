@@ -4,6 +4,7 @@ namespace APIPruebaToka.Repositories
 {
     public interface IPersonaFisicaRepository
     {
-        Task<(int Error, string Mensaje)> CreatePersonaFisicaAsync(CreatePersonaFisica dto);
+        Task<(int Error, string Mensaje)> CreatePersonaFisicaAsync(CreatePersonaFisicaDTO dto);
+        Task<List<PersonaFisicaDTO>> GetPersonasFisicasAsync();
     }
 }
