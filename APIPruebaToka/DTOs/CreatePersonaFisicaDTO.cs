@@ -1,6 +1,6 @@
 ﻿namespace APIPruebaToka.DTOs
 {
-    public class CreatePersonaFisica
+    public class CreatePersonaFisicaDTO
     {
         public string Nombre { get; set; } = string.Empty;
         public string ApellidoPaterno { get; set; } = string.Empty;
