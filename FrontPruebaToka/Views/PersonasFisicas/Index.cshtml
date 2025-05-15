@@ -5,6 +5,11 @@
 
 <h1>Personas Físicas</h1>
 
+<button class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+    Agregar Persona Física
+</button>
+
+
 <table class="table table-bordered table-striped">
     <thead>
         <tr>
@@ -53,7 +58,7 @@
     </div>
 }
 
-<!-- Modal -->
+<!-- Modal delete -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <form method="post" asp-action="Delete" asp-controller="PersonasFisicas">
@@ -72,6 +77,42 @@
                 </div>
             </div>
         </form>
+    </div>
+</div>
+
+<!-- Modal add -->
+<div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form asp-action="Create" method="post">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="Nombre" class="form-label">Nombre</label>
+                        <input name="Nombre" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ApellidoPaterno" class="form-label">Apellido Paterno</label>
+                        <input name="ApellidoPaterno" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="ApellidoMaterno" class="form-label">Apellido Materno</label>
+                        <input name="ApellidoMaterno" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="RFC" class="form-label">RFC</label>
+                        <input name="RFC" class="form-control" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="FechaNacimiento" class="form-label">Fecha de Nacimiento</label>
+                        <input name="FechaNacimiento" type="date" class="form-control" />
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">Guardar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
 

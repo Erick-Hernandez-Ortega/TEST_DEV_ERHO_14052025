@@ -8,6 +8,6 @@
         public string ApellidoMaterno { get; set; } = "";
         public string RFC { get; set; } = "";
         public DateTime FechaNacimiento { get; set; }
-        public string UsuarioAgrega { get; set; } = "";
+        public string UsuarioAgrega { get; set; } = "1";
     }
 }

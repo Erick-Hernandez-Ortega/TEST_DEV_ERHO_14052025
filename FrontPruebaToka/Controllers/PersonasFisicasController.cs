@@ -1,5 +1,6 @@
 ﻿using FrontPruebaToka.Models;
 using Microsoft.AspNetCore.Mvc;
+using System.Text;
 using System.Text.Json;
 
 namespace FrontPruebaToka.Controllers
@@ -50,5 +51,32 @@ namespace FrontPruebaToka.Controllers
             return RedirectToAction("Index");
         }
 
+        [HttpPost]
+        public async Task<IActionResult> Create(PersonaFisicaViewModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                TempData["ErrorMessage"] = "Todos los campos son requeridos.";
+                return RedirectToAction("Index");
+            }
+
+            var client = _httpClientFactory.CreateClient();
+
+            var json = JsonSerializer.Serialize(model);
+            var content = new StringContent(json, Encoding.UTF8, "application/json");
+
+            var response = await client.PostAsync("http://localhost:5268/api/PersonaFisica", content);
+
+            if (response.IsSuccessStatusCode)
+            {
+                TempData["SuccessMessage"] = "Persona agregada exitosamente.";
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error al agregar la persona.";
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }
